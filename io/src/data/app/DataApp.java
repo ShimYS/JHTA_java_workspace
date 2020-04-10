@@ -61,6 +61,7 @@ public class DataApp {
 					System.out.println("[월별 통계]");
 					
 					service.printDataStatByMonth();
+//					service.printDataStatBymontgByTeacher();
 					
 					System.out.println("### 월별 통계 보기를 완료했습니다 ###");
 				} else if(statMenuNo == 3) {
@@ -72,13 +73,15 @@ public class DataApp {
 				} else if(statMenuNo == 4) {
 					System.out.println("[위반내용별 통계]");
 					
+					service.printDataStatViolation();
 					
-					
+					System.out.println("### 위반내용별 통계 보기를 완료했습니다 ###");
 				} else if(statMenuNo == 5) {
 					System.out.println("[요약 통계]");
 					
+					service.printDataStat();
 					
-					
+					System.out.println("### 요약 통계 보기를 완료했습니다 ###");
 				}
 		
 			} else if(menuNo == 0) {
