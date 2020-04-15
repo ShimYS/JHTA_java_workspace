@@ -1,9 +1,9 @@
 package demo1;
 
+
 public class CustomerDemo {
 
 	public static void main(String[] args) {
-		
 		Customer customer1 = new Customer("홍길동", 0);
 		Customer customer2 = new Customer("홍길동", Grade.VIP);
 		Customer customer3 = new Customer("김유신", Grade.SILVER);
@@ -46,4 +46,5 @@ public class CustomerDemo {
 		}
 		return point;
 	}
+	
 }

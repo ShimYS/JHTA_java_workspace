@@ -8,7 +8,7 @@ public class User {
 	String name;
 	@NotNull(message = "이메일은 필수입력값입니다.")
 	String email;
-	
+	@NotNull(message =  "전화번호는 필수입력값입니다.")
 	String tel;
 	
 	
