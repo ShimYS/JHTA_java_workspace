@@ -23,7 +23,7 @@ public class ReaderDemo1 {
 			}
 		}
 		System.out.println("총 구매금액: " + totalOrderPrice);
-		br.close();
+		br.close();		
 	}
 
 }

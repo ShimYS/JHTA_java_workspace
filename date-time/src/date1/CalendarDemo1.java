@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class CalendarDemo1 {
 
 	public static void main(String[] args) {
-		// Calendar´Â Ãß»óÅ¬·¡½º¶ó new·Î °´Ã¼»ý¼º ºÒ°¡		
+		// Calendarï¿½ï¿½ ï¿½ß»ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ newï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½		
 		Calendar cal = Calendar.getInstance();	
 		System.out.println(cal);
 		
@@ -16,14 +16,14 @@ public class CalendarDemo1 {
 		int minute = cal.get(Calendar.MINUTE);
 		int second = cal.get(Calendar.SECOND);
 		
-		int yoil = cal.get(Calendar.DAY_OF_WEEK);		// 1~7	1:ÀÏ¿äÀÏ
-		System.out.println("³â: " + year);
-		System.out.println("¿ù: " + month);
-		System.out.println("ÀÏ: " + day);
-		System.out.println("½Ã: " + hour);
-		System.out.println("ºÐ: " + minute);
-		System.out.println("ÃÊ: " + second);
-		System.out.println("¿äÀÏ: " + yoil);
+		int yoil = cal.get(Calendar.DAY_OF_WEEK);		// 1~7	1:ï¿½Ï¿ï¿½ï¿½ï¿½
+		System.out.println("ï¿½ï¿½: " + year);
+		System.out.println("ï¿½ï¿½: " + month);
+		System.out.println("ï¿½ï¿½: " + day);
+		System.out.println("ï¿½ï¿½: " + hour);
+		System.out.println("ï¿½ï¿½: " + minute);
+		System.out.println("ï¿½ï¿½: " + second);
+		System.out.println("ï¿½ï¿½ï¿½ï¿½: " + yoil);
 	}
 
 }

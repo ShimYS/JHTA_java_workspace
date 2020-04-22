@@ -8,10 +8,10 @@ public class CalendarDemo3 {
 	public static void main(String[] args) {
 		
 		// Date ----> Calendar
-		// Date¿¡ µé¾îÀÖ´Â ³¯Â¥Á¤º¸·Î Calendar¸¦ ¸¸µé°í ½ÍÀ»¶§
+		// Dateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Calendarï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Date date1 = new Date();
 		Calendar cal1 = Calendar.getInstance();
-		cal1.setTime(date1);
+		cal1.setTime(date1);		
 		
 		
 		
