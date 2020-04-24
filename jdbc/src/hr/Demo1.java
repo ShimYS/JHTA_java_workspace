@@ -26,7 +26,7 @@ public class Demo1 {
 		Connection connection = DriverManager.getConnection(url, user, password); // Oracle Connection(부모가 Connection)을 얻음
 		
 		// 3. SQL 실행, 결과값반환을 담당하는 PreparedStatement객체 획득하기
-		String sql = "select gra, lowest_sal, highest_sal from job_grades where gra = ?";  // 사용자로부터 입력받을 값은 ? 를 넣는다.
+		String sql = "select gra, lowest_sal, highest_sal from job_grades where gra = ?";  // 사용자로부터 입력받을 값은 ? 를 넣는다.   '%'||?||'%'
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.setString(1, g);
 		
