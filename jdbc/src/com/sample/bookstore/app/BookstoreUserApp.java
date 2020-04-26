@@ -1,5 +1,7 @@
 package com.sample.bookstore.app;
 
+import java.util.List;
+
 import com.sample.bookstore.dao.UserDAO;
 import com.sample.bookstore.util.KeyboardUtil;
 import com.sample.bookstore.vo.User;
@@ -22,14 +24,28 @@ public class BookstoreUserApp {
 			} else if (menuNo == 2) {
 				System.out.println("[주문 검색]");
 				System.out.println("-------------------------------------------------");
-				System.out.println("1.주문번호  2.유저아이디  3.장르  4.가격");
+				System.out.println("1.이름  2.유저아이디  3.이메일  4.등록날짜");
 				System.out.println("-------------------------------------------------");
 				
 				System.out.print("검색 조건을 선택하세요: ");
 				int searchMenuNo = KeyboardUtil.nextInt();
 				
 				if(searchMenuNo == 1) {
+					System.out.println("[이름으로 검색]");
+					System.out.print("이름을 입력하세요: ");
+					String userName = KeyboardUtil.nextString();
 					
+					List<User> users = userDao.getUserByName(userName);
+					System.out.println("아이디\t이름\t이메일\t포인트\t가입날짜");
+					for(User user : users) {
+						System.out.print(user.getId()+"\t");
+						System.out.print(user.getName()+"\t");
+						System.out.print(user.getEmail()+"\t");
+						System.out.print(user.getPoint()+"\t");
+						System.out.println(user.getDate());
+					}
+					
+					System.out.println("##### 이름검색을 완료했습니다 #####");
 				} else if(searchMenuNo == 2) {
 					System.out.println("[유저아이디 검색]");
 					System.out.print("유저아이디를 입력하세요: ");
@@ -57,20 +73,19 @@ public class BookstoreUserApp {
 				String name = KeyboardUtil.nextString();
 				System.out.print("이메일을 입력하세요: ");
 				String email = KeyboardUtil.nextString();
-				int point = 1000;
 				
 				User user = new User();
 				user.setId(id);
 				user.setPassword(password);
 				user.setName(name);
 				user.setEmail(email);
-				user.setPoint(point);
 
 				userDao.addUser(user);
 				
 				System.out.println("##### 신규유저 등록을 완료했습니다 #####");
 				
 			} else if (menuNo == 4) {
+				
 
 			} else if (menuNo == 5) {
 
@@ -79,6 +94,10 @@ public class BookstoreUserApp {
 				System.out.println("##### 프로그램을 종료합니다 #####");
 				break;
 			}
+			
+			System.out.println();
+			System.out.println();
+			System.out.println();
 		}
 
 	}

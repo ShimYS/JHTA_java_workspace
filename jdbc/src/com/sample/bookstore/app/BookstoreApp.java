@@ -157,7 +157,7 @@ public class BookstoreApp {
 	}
 	
 	private static void displayBooks(List<Book> books) {
-		System.out.println("번호\t제목\t저자\t장르\t출판사\t가격할인\t가격\t등록일");
+		System.out.println("번호\t제목\t저자\t장르\t출판사\t가격할인\t가격\t재고량\t등록일");
 		for(Book book : books) {				
 			System.out.print(book.getNo()+"\t");
 			System.out.print(book.getTitle()+"\t");
@@ -166,6 +166,7 @@ public class BookstoreApp {
 			System.out.print(book.getPublisher()+"	");
 			System.out.print(book.getPrice()+"	");
 			System.out.print(book.getDiscountPrice()+"	");
+			System.out.print(book.getStock()+"	");		
 			System.out.println(book.getRegistreredDate());			
 		}
 	}

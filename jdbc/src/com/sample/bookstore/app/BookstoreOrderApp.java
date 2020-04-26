@@ -36,10 +36,11 @@ public class BookstoreOrderApp {
 					int orderNo = KeyboardUtil.nextInt();
 					
 					Order order = orderDao.getOrderByNo(orderNo);
-					System.out.println("주문번호\t유저아이디\t책번호\t가격\t구매수량\t주문날짜");
+					System.out.println("주문번호\t이름\t제목\t가격\t결제금액\t구매수량\t주문날짜");
 					System.out.print(order.getNo()+"\t");
-					System.out.print(order.getUserId()+"\t");
-					System.out.print(order.getBookNo()+"\t");
+					System.out.print(order.getUser().getId()+"\t");
+					System.out.print(order.getBook().getTitle()+"\t");
+					System.out.print(order.getBook().getPrice()+"\t");
 					System.out.print(order.getPrice()+"\t");
 					System.out.print(order.getAmount()+"\t");
 					System.out.print(order.getDate()+"\t");
@@ -57,11 +58,12 @@ public class BookstoreOrderApp {
 					if(orders.isEmpty()) {
 						System.out.println("유저아이디 ["+userId+"]에 해당하는 책정보가 존재하지 않습니다.");
 					} else {
-						System.out.println("주문번호\t유저아이디\t책번호\t가격\t구매수량\t주문날짜");
+						System.out.println("주문번호\t이름\t제목\t가격\t결제금액\t구매수량\t주문날짜");
 						for(Order order : orders) {
 							System.out.print(order.getNo()+"\t");
-							System.out.print(order.getUserId()+"\t");
-							System.out.print(order.getBookNo()+"\t");
+							System.out.print(order.getUser().getId()+"\t");
+							System.out.print(order.getBook().getTitle()+"\t");
+							System.out.print(order.getBook().getPrice()+"\t");
 							System.out.print(order.getPrice()+"\t");
 							System.out.print(order.getAmount()+"\t");
 							System.out.print(order.getDate()+"\t");
@@ -86,8 +88,6 @@ public class BookstoreOrderApp {
 				int amount = KeyboardUtil.nextInt();
 				
 				Order order = new Order();
-				order.setUserId(userId);
-				order.setBookNo(bookNo);
 				order.setPrice(price);
 				order.setAmount(amount);
 				

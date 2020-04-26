@@ -11,6 +11,7 @@ public class Book {
 	private String publisher;
 	private int price;
 	private int discountPrice;
+	private int stock;
 	private Date registreredDate;
 	
 	public Book() {}
@@ -77,6 +78,14 @@ public class Book {
 
 	public void setRegistreredDate(Date registreredDate) {
 		this.registreredDate = registreredDate;
+	}
+
+	public int getStock() {
+		return stock;
+	}
+
+	public void setStock(int stock) {
+		this.stock = stock;
 	}
 	
 	

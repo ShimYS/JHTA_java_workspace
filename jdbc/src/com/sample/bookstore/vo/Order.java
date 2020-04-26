@@ -3,12 +3,12 @@ package com.sample.bookstore.vo;
 import java.util.Date;
 
 public class Order {
-	int no;
-	String userId;
-	int bookNo;
-	int price;
-	int amount;
-	Date date;
+	private int no;
+	private User user;
+	private Book book;
+	private int price;
+	private int amount;
+	private Date date;
 	
 	public Order() {}
 
@@ -18,22 +18,6 @@ public class Order {
 
 	public void setNo(int no) {
 		this.no = no;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public int getBookNo() {
-		return bookNo;
-	}
-
-	public void setBookNo(int bookNo) {
-		this.bookNo = bookNo;
 	}
 
 	public int getPrice() {
@@ -58,6 +42,22 @@ public class Order {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
 	}
 	
 	

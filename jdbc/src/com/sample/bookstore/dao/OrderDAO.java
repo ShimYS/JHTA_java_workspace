@@ -8,23 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sample.bookstore.util.ConnectionUtil;
+import com.sample.bookstore.util.QueryUtil;
+import com.sample.bookstore.vo.Book;
 import com.sample.bookstore.vo.Order;
+import com.sample.bookstore.vo.User;
 
 public class OrderDAO {
 	
-	public void addOrder(Order order) throws SQLException {
-		String sql = "insert into sample_book_order " 
-				+ "(order_no, user_id, book_no, order_price, order_amount, order_registered_date)" 
-				+ "values" 
-				+ "(sample_order_seq.nextval, ?, ?, ?, ?, sysdate)";
-		
+	public void addOrder(Order order) throws Exception {
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-		pstmt.setString(1, order.getUserId());
-		pstmt.setInt(2, order.getBookNo());
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("order.addOrder"));
+		pstmt.setString(1, order.getUser().getId());
+		pstmt.setInt(2, order.getBook().getNo());
 		pstmt.setInt(3, order.getPrice());
-		pstmt.setInt(4, order.getAmount());
-		
+		pstmt.setInt(4, order.getAmount());		
 		pstmt.executeUpdate();
 		
 		pstmt.close();
@@ -33,25 +30,14 @@ public class OrderDAO {
 	
 	public List<Order> getrOrderByUserId(String userId) throws SQLException{
 		List<Order> orders = new ArrayList<Order>();
-		
-		String sql = "select * "
-					+ "from sample_book_order "
-					+ "where user_id = ?";
-		
+
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("order.getOrderByUserId"));
 		pstmt.setString(1, userId);
-		
+
 		ResultSet rs = pstmt.executeQuery();		
 		while(rs.next()) {
-			Order order = new Order();
-			order.setNo(rs.getInt("order_no"));
-			order.setUserId(rs.getString("user_id"));
-			order.setBookNo(rs.getInt("book_no"));
-			order.setPrice(rs.getInt("order_price"));
-			order.setAmount(rs.getInt("order_amount"));
-			order.setDate(rs.getDate("order_registered_date"));
-			orders.add(order);
+			orders.add(resultSetToOrder(rs));
 		}
 		rs.close();
 		pstmt.close();
@@ -61,30 +47,39 @@ public class OrderDAO {
 	}
 	
 	public Order getOrderByNo(int orderNo) throws Exception {
-		
-		String sql = "select * "
-					+ "from sample_book_order "
-					+ "where order_no = ? ";
-		
+		Order order = null;
+
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("order.getOrderByNo"));
 		pstmt.setInt(1, orderNo);
-		
-		ResultSet rs = pstmt.executeQuery();
-		
-		Order order = new Order();
+
+		ResultSet rs = pstmt.executeQuery();		
 		if(rs.next()) {
-			order.setNo(rs.getInt("order_no"));
-			order.setUserId(rs.getString("user_id"));
-			order.setBookNo(rs.getInt("book_no"));
-			order.setPrice(rs.getInt("order_price"));
-			order.setAmount(rs.getInt("order_amount"));
-			order.setDate(rs.getDate("order_registered_date"));
-		}		
+			order = resultSetToOrder(rs);
+		}
 		rs.close();
 		pstmt.close();
 		connection.close();
 		
+		return order;
+	}
+	
+	public static Order resultSetToOrder(ResultSet rs) throws SQLException {
+		Order order = new Order();
+		order.setNo(rs.getInt("order_no"));
+		order.setPrice(rs.getInt("order_price"));
+		order.setAmount(rs.getInt("order_amount"));
+		order.setDate(rs.getDate("order_registered_date"));
+		
+		User user = new User();
+		user.setName(rs.getString("user_name"));
+		
+		Book book = new Book(); 
+		book.setTitle(rs.getString("book_title"));
+		book.setPrice(rs.getInt("book_price"));
+		
+		order.setUser(user);
+		order.setBook(book);
 		return order;
 	}
 	
