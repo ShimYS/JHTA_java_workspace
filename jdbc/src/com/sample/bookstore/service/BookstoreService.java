@@ -2,11 +2,17 @@ package com.sample.bookstore.service;
 
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.sample.bookstore.dao.AnswerDAO;
 import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.dao.OrderDAO;
+import com.sample.bookstore.dao.QuestionDAO;
 import com.sample.bookstore.dao.UserDAO;
+import com.sample.bookstore.vo.Answer;
 import com.sample.bookstore.vo.Book;
 import com.sample.bookstore.vo.Order;
+import com.sample.bookstore.vo.Question;
 import com.sample.bookstore.vo.User;
 
 /**
@@ -19,6 +25,9 @@ public class BookstoreService {
 	private UserDAO userDAO = new UserDAO();
 	private BookDAO bookDAO = new BookDAO();
 	private OrderDAO orderDAO = new OrderDAO();
+	private QuestionDAO questionDAO = new QuestionDAO();
+	private AnswerDAO answerDAO = new AnswerDAO();
+	
 	
 	/**
 	 * 신규 사용자 정보를 등록한다.
@@ -31,12 +40,12 @@ public class BookstoreService {
 		//중복 id체크
 		if(savedUser != null) {
 			return false;
-		//중복없으면 등록
-		} else {
-			userDAO.addUser(user);
-			return true;
-		}
-		
+		} 
+		// 비밀번호 암호화
+		String md5Password = DigestUtils.md5Hex(user.getPassword());
+		user.setPassword(md5Password);
+		userDAO.addUser(user);
+		return true;
 	}
 	
 	/**
@@ -101,12 +110,78 @@ public class BookstoreService {
 		return true;	
 	}
 	
-	public List<Order> 내주문조회(String userId) {
-		return null;
+	/**
+	 * 지정된 사용자아이디의 모든 주문내역을 반환한다.
+	 * @param userId 주문내역을 조회할 사용자 아이디
+	 * @return 주문내역정보, 주문내역이 없는 경우 empty List가 반환된다. 
+	 * @throws Exception 
+	 */
+	public List<Order> 내주문조회(String userId) throws Exception {
+		return orderDAO.getrOrderByUserId(userId);
 	}
 	
-	public Order 주문상세정보(int orderNo) {
-		return null;
+	/**
+	 * 지정된 주문번호에 해당하는 주문정보를 반환한다.
+	 * @param orderNo 주문정보를 조회할 주문번호
+	 * @return 주문정보 상세내역, 주문번호가 틀린 경우 null이 반환된다.
+	 * @throws Exception
+	 */
+	public Order 주문상세정보(int orderNo) throws Exception {		 
+		return orderDAO.getOrderByNo(orderNo);
 	}
-
+	
+	
+	
+	
+	public boolean 문의등록(Question question) throws Exception {
+		User user = userDAO.getUserById(question.getUser().getId());
+		if(user == null) {
+			return false;
+		}
+		questionDAO.addQuestion(question);
+		return true;
+	}
+	
+	public List<Question> 문의글전체조회() throws Exception{
+		return questionDAO.getAllQuestion();
+	}
+	
+	public Question 문의글조회(int questionNo) throws Exception {
+		Question question = questionDAO.getQuestionByNo(questionNo);
+		question.setViewCount(question.getViewCount()+1);
+		questionDAO.updateQuestion(question);
+		return question;
+	}
+	
+	public boolean 문의글삭제(int questionNo, String userId) throws Exception {
+		User user = userDAO.getUserById(userId);
+		if(user == null) {
+			return false;
+		}
+		Question question = this.문의글조회(questionNo);
+		if(question == null) {
+			return false;
+		}
+		
+		questionDAO.removeQuestion(questionNo, userId);
+		return true;
+	}
+	
+	public boolean 답변등록(int questionNo, String content) throws Exception {
+		Question question = questionDAO.getQuestionByNo(questionNo);
+		if(question == null) {
+			return false;
+		}
+		
+		Answer answer = new Answer();
+		answer.setQuestionNo(questionNo);
+		answer.setContent(content);
+		answerDAO.addAnswer(answer);
+		
+		// 답변상태 변경, 조회수 증가
+		question.setStatus("Y");
+		question.setViewCount(question.getViewCount()+1);
+		questionDAO.updateQuestion(question);
+		return true;
+	}
 }
