@@ -27,21 +27,17 @@ public class BookDAO {
 	 * @throws Exception
 	 */
 	public void addBook(Book book) throws Exception {
-		String sql = "insert into sample_books "
-				+ "(book_no, book_title, book_writer, book_genre, book_publisher, book_price, book_discount_price, book_registered_date) "
-				+ "values" 
-				+ "(sample_book_seq.nextval, ?, ?, ?, ?, ?, ?, sysdate, ?)";
-
 		Connection connection = ConnectionUtil.getConnection();
-
-		PreparedStatement pstmt = connection.prepareStatement(sql);
+		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("book.addBook"));
 		pstmt.setString(1, book.getTitle());
 		pstmt.setString(2, book.getWriter());
 		pstmt.setString(3, book.getGenre());
 		pstmt.setString(4, book.getPublisher());
 		pstmt.setInt(5, book.getPrice());
-		pstmt.setInt(6, book.getDiscountPrice());
-		pstmt.setInt(7, book.getStock());
+		pstmt.setInt(6, book.getStock());
+		pstmt.setInt(7, book.getDiscountPrice());
+		pstmt.setDouble(8, book.getPoint());
+		pstmt.setInt(9, book.getLike());
 		pstmt.executeUpdate();
 
 		pstmt.close();
@@ -83,16 +79,18 @@ public class BookDAO {
 	 * @return 책정보를 포함하고 있는 List객체
 	 * @throws Exception
 	 */
-	public List<Book> getAllBooks() throws Exception {
-		String sql = "select * " 
-					+ "from sample_books " 
-					+ "order by book_no asc ";
-
+	public List<Book> getAllBooks(int menuNumber) throws Exception {
 		List<Book> books = new ArrayList<Book>();
-
 		Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql);
-
+		PreparedStatement pstmt=null;
+		
+		if(menuNumber == 1) {
+			pstmt = connection.prepareStatement(QueryUtil.getSQL("book.getAllBooksByPrice"));
+		} else if(menuNumber == 2) {
+			pstmt = connection.prepareStatement(QueryUtil.getSQL("book.getAllBooksByPoint"));
+		} else if(menuNumber == 3) {
+			pstmt = connection.prepareStatement(QueryUtil.getSQL("book.getAllBooksByLike"));
+		}
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
 			books.add(resultSetToBook(rs));
@@ -226,12 +224,13 @@ public class BookDAO {
 		PreparedStatement pstmt = connection.prepareStatement(QueryUtil.getSQL("book.updateBook"));
 		pstmt.setString(1, book.getTitle());
 		pstmt.setString(2, book.getWriter());
-		pstmt.setString(3, book.getPublisher());
-		pstmt.setString(4, book.getGenre());
+		pstmt.setString(3, book.getGenre());
+		pstmt.setString(4, book.getPublisher());
 		pstmt.setInt(5, book.getPrice());
 		pstmt.setInt(6, book.getStock());
-		pstmt.setInt(7, book.getDiscountPrice());
-		pstmt.setInt(8, book.getNo());
+		pstmt.setInt(7, book.getDiscountPrice());		
+		pstmt.setDouble(8, book.getPoint());
+		pstmt.setInt(9, book.getLike());
 		pstmt.executeUpdate();
 		
 		pstmt.close();
@@ -245,7 +244,7 @@ public class BookDAO {
 	 * @return 책정보가 포함된 Book객체
 	 * @throws SQLException
 	 */
-	public static Book resultSetToBook(ResultSet rs) throws SQLException {
+	public Book resultSetToBook(ResultSet rs) throws SQLException {
 		Book book = new Book();
 		book.setNo(rs.getInt("book_no"));
 		book.setTitle(rs.getString("book_title"));
@@ -256,6 +255,8 @@ public class BookDAO {
 		book.setDiscountPrice(rs.getInt("book_discount_price"));
 		book.setStock(rs.getInt("book_stock"));
 		book.setRegistreredDate(rs.getDate("book_registered_date"));
+		book.setPoint(rs.getDouble("book_point"));
+		book.setLike(rs.getInt("book_like"));
 		return book;
 	}
 

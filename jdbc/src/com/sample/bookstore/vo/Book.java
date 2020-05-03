@@ -13,8 +13,26 @@ public class Book {
 	private int discountPrice;
 	private int stock;
 	private Date registreredDate;
+	private double Point;
+	private int Like;
 	
 	public Book() {}
+	
+	public double getPoint() {
+		return Point;
+	}
+
+	public void setPoint(double Point) {
+		this.Point = Point;
+	}
+
+	public int getLike() {
+		return Like;
+	}
+
+	public void setLike(int Like) {
+		this.Like = Like;
+	}
 
 	public int getNo() {
 		return no;

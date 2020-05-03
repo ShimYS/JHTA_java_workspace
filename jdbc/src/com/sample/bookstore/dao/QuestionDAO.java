@@ -56,6 +56,10 @@ public class QuestionDAO {
 		if (rs.next()) {
 			question = resultSetToQuestion(rs);
 		}
+		
+		rs.close();
+		pstmt.close();
+		connection.close();
 
 		return question;
 	}
@@ -86,7 +90,7 @@ public class QuestionDAO {
 		connection.close();
 	}
 
-	public static Question resultSetToQuestion(ResultSet rs) throws Exception {
+	public  Question resultSetToQuestion(ResultSet rs) throws Exception {
 		Question question = new Question();
 		question.setNo(rs.getInt("question_no"));
 		question.setTitle(rs.getString("question_title"));
@@ -95,11 +99,14 @@ public class QuestionDAO {
 		question.setStatus(rs.getString("question_status"));
 		question.setRegisteredDate(rs.getDate("question_registered_date"));
 		question.setViewCount(rs.getInt("question_view_count"));
-
+		
 		User user = new User();
 		user.setId(rs.getString("user_id"));
 		question.setUser(user);
+		
 		return question;
 	}
+	
+	
 
 }

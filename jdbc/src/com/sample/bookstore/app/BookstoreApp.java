@@ -1,5 +1,6 @@
 package com.sample.bookstore.app;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.service.BookstoreService;
@@ -23,13 +24,45 @@ public class BookstoreApp {
 
 			if (menuNo == 1) {
 				System.out.println("[전체 도서 조회]");
-				List<Book> books = bookDao.getAllBooks();
-
-				System.out.println("전체 도서 갯수: " + books.size() + "권");
-
-				displayBooks(books);
-
-				System.out.println("##### 전체조회를 완료했습니다 #####");
+				
+				System.out.println("-------------------------------------------------");
+				System.out.println("1.가격순  2.평점순  3.추천순");
+				System.out.println("-------------------------------------------------");
+				
+				System.out.print("메뉴를 선택하세요: ");
+				int allBookMenuNo = KeyboardUtil.nextInt();
+				
+				List<Book> books = new ArrayList<Book>();
+				if(allBookMenuNo == 1) {
+					System.out.println("[가격순 검색]");						
+					books = service.모든도서검색(1);
+					
+				} else if(allBookMenuNo == 2) {
+					System.out.println("[평점순 검색]");
+					books = service.모든도서검색(2);
+					
+				} else if(allBookMenuNo == 3) {
+					System.out.println("[추천순 검색]");
+					books = service.모든도서검색(3);						
+				}
+				
+				if(books.isEmpty()) {
+					System.out.println("도서정보가 존재하지 않습니다.");
+				} else {
+					System.out.println(books.size() +"권의 책이 조회되었습니다.");
+					System.out.println("번호\t제목\t저자\t출판사\t가격\t평점\t추천수");
+					for(Book book : books) {				
+						System.out.print(book.getNo()+"\t");
+						System.out.print(book.getTitle()+"\t");
+						System.out.print(book.getWriter()+"\t");						
+						System.out.print(book.getPublisher()+"\t");
+						System.out.print(book.getPrice()+"\t");
+						System.out.print(book.getPoint()+"\t");
+						System.out.println(book.getLike());
+						
+					}
+					System.out.println("##### 전체 도서 조회를 완료했습니다 #####");
+				}
 
 			} else if (menuNo == 2) {
 				System.out.println("[도서 검색]");
@@ -187,7 +220,7 @@ public class BookstoreApp {
 					if(isSuccess) {
 						System.out.println("##### 답변작성을 완료했습니다 #####");
 					} else {
-						System.out.println("문의글번호 "+questionNo+"와 일치하는 문의글이 존재하지 않습니다.");
+						System.out.println("답변등록에 실패하였습니다.");
 					}
 				}
 

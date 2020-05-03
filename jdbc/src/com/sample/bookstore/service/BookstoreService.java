@@ -8,11 +8,13 @@ import com.sample.bookstore.dao.AnswerDAO;
 import com.sample.bookstore.dao.BookDAO;
 import com.sample.bookstore.dao.OrderDAO;
 import com.sample.bookstore.dao.QuestionDAO;
+import com.sample.bookstore.dao.ReviewDAO;
 import com.sample.bookstore.dao.UserDAO;
 import com.sample.bookstore.vo.Answer;
 import com.sample.bookstore.vo.Book;
 import com.sample.bookstore.vo.Order;
 import com.sample.bookstore.vo.Question;
+import com.sample.bookstore.vo.Review;
 import com.sample.bookstore.vo.User;
 
 /**
@@ -27,7 +29,7 @@ public class BookstoreService {
 	private OrderDAO orderDAO = new OrderDAO();
 	private QuestionDAO questionDAO = new QuestionDAO();
 	private AnswerDAO answerDAO = new AnswerDAO();
-	
+	private ReviewDAO reviewDAO = new ReviewDAO();
 	
 	/**
 	 * 신규 사용자 정보를 등록한다.
@@ -46,6 +48,10 @@ public class BookstoreService {
 		user.setPassword(md5Password);
 		userDAO.addUser(user);
 		return true;
+	}
+	
+	public List<Book> 모든도서검색(int number) throws Exception {
+		return bookDAO.getAllBooks(number);
 	}
 	
 	/**
@@ -143,13 +149,22 @@ public class BookstoreService {
 	}
 	
 	public List<Question> 문의글전체조회() throws Exception{
-		return questionDAO.getAllQuestion();
+		List<Question> list = questionDAO.getAllQuestion(); 
+		for(Question question : list) {
+			question.setViewCount(question.getViewCount()+1);
+			questionDAO.updateQuestion(question);
+		}
+		return list;
 	}
 	
 	public Question 문의글조회(int questionNo) throws Exception {
+	
 		Question question = questionDAO.getQuestionByNo(questionNo);
-		question.setViewCount(question.getViewCount()+1);
-		questionDAO.updateQuestion(question);
+		if(question != null) {
+			question.setViewCount(question.getViewCount()+1);
+			questionDAO.updateQuestion(question);
+		}
+		
 		return question;
 	}
 	
@@ -172,16 +187,42 @@ public class BookstoreService {
 		if(question == null) {
 			return false;
 		}
+		if(!question.getStatus().equals("N")) {			
+			return false;
+		}
+		question.setStatus("Y");
+		questionDAO.updateQuestion(question);
 		
 		Answer answer = new Answer();
 		answer.setQuestionNo(questionNo);
 		answer.setContent(content);
 		answerDAO.addAnswer(answer);
-		
-		// 답변상태 변경, 조회수 증가
-		question.setStatus("Y");
-		question.setViewCount(question.getViewCount()+1);
-		questionDAO.updateQuestion(question);
+				
 		return true;
 	}
+	
+	public Answer 답변조회(int questionNo) throws Exception {
+		return answerDAO.getAnswer(questionNo);
+	}
+
+	
+	public boolean 리뷰등록(Review review) throws Exception {		
+		User user = userDAO.getUserById(review.getUser().getId());
+		if(user == null) {
+			return false;
+		}
+		Book book = bookDAO.getBookByNo(review.getBook().getNo());
+		if(book == null) {
+			return false;
+		}
+		
+		reviewDAO.addReview(review);
+		return true;
+	}
+	
+	public void 리뷰삭제(int reviewNo) {
+		
+	}
+	
+	
 }
